@@ -20,11 +20,13 @@ def Finestra1():
             self.TractaBoto(fine)
 
         def TractarPdf(self):
-            name = filedialog.askopenfilename(title = "Escull el fitxer que conté la informació", filetype = (("PDF files","*.pdf"),))
+            name = filedialog.askopenfilename(title = "Escull el fitxer que conté la informació", filetypes = (("PDF files","*.pdf"),))
             cachos = name.split("/")
             self.num+=1
             self.sub.append(name)
             self.prv.append(cachos[len(cachos)-1])
+            print("vector sub: " + ''.join(self.sub))
+            print("vector prv: " + ''.join(self.prv))
             self.funcioScrollbar(fine)
 
             #Finestra2(name)
@@ -39,7 +41,7 @@ def Finestra1():
         def funcioScrollbar(self,fine):
             wrapper1 = LabelFrame(fine,bg = "white")
 
-            myCanvas = Canvas(wrapper1,bg = "white")
+            myCanvas = Canvas(wrapper1,bg = "white", confine = "false")
             myCanvas.place(anchor = "nw")
 
             yscrollbar = Scrollbar(wrapper1, orient = 'vertical', command = myCanvas.yview)
