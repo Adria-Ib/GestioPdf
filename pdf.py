@@ -14,7 +14,6 @@ def Finestra1():
         def __init__(self,fine):
             self.txt = 0
             self.num = 0
-            #self.trossos = plenarTrossos(subgrups,assignatures)
             self.prv = []
             self.sub = []
             self.TractaBoto(fine)
@@ -27,7 +26,7 @@ def Finestra1():
             self.prv.append(cachos[len(cachos)-1])
             self.funcioScrollbar(fine)
 
-            #Finestra2(name)
+            Finestra2(name)
 
         def crearLabels(self,frame):
             t = 0
@@ -46,14 +45,14 @@ def Finestra1():
 
             yscrollbar.place(relx=1, rely=0, relheight=1, anchor='ne')
 
-            myCanvas.configure(yscrollcommand = yscrollbar.set)
+            myCanvas.configure(yscrollcommand = yscrollbar.set, confine = 'false')
 
             myCanvas.bind('<Configure>', lambda e:myCanvas.configure(scrollregion = myCanvas.bbox('all')))
 
             myFrame = Frame(myCanvas)
             myCanvas.create_window((0,0),window = myFrame,anchor='nw')
 
-            wrapper1.place(relx = 0.45, rely = 0.4, relheight = 0.5, relwidth = 0.5)
+            wrapper1.place(relx = 0.45, rely = 0.4, relheight = 0.2, relwidth = 0.5)
             self.crearLabels(myFrame)
 
 
