@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import scrolledtext
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
@@ -21,41 +22,31 @@ def Finestra1():
         def TractarPdf(self):
             name = filedialog.askopenfilename(title = "Escull el fitxer que conté la informació", filetypes = (("PDF files","*.pdf"),))
             cachos = name.split("/")
-            self.num+=1
             self.sub.append(name)
             self.prv.append(cachos[len(cachos)-1])
-            print("vector sub: " + ''.join(self.sub))
-            print("vector prv: " + ''.join(self.prv))
             self.funcioScrollbar(fine)
+            self.num+=1
+            #Finestra2(name)
 
-            Finestra2(name)
+        def crearLabels(self):
+            i = 0
+            string = ""
+            while(i <= self.num):
+                string = string + self.prv[i]+'\n'
+                i+=1
+            return string
 
-        def crearLabels(self,frame):
-            t = 0
-            while(t < self.num):
-                Label(frame,
-                      text = self.prv[t], anchor = W, bg = "white", fg = "black", font =("Arial",8), justify = LEFT).grid(row = t,sticky = W+E+N+S)
-                t +=1
 
         def funcioScrollbar(self,fine):
-            wrapper1 = LabelFrame(fine,bg = "white")
+            text_area = scrolledtext.ScrolledText(fine,
+                            width = 30,
+                            height = 8,
+                            font = ("Comic Sans",
+                                    8))
+            text_area.place(relx = 0.45, rely = 0.4, relheight = 0.2, relwidth = 0.5)
+            text_area.insert(INSERT, self.crearLabels())
+            text_area.configure(state ='disabled')
 
-            myCanvas = Canvas(wrapper1,bg = "white", confine = "false")
-            myCanvas.place(anchor = "nw")
-
-            yscrollbar = Scrollbar(wrapper1, orient = 'vertical', command = myCanvas.yview)
-
-            yscrollbar.place(relx=1, rely=0, relheight=1, anchor='ne')
-
-            myCanvas.configure(yscrollcommand = yscrollbar.set, confine = 'false')
-
-            myCanvas.bind('<Configure>', lambda e:myCanvas.configure(scrollregion = myCanvas.bbox('all')))
-
-            myFrame = Frame(myCanvas)
-            myCanvas.create_window((0,0),window = myFrame,anchor='nw')
-
-            wrapper1.place(relx = 0.45, rely = 0.4, relheight = 0.2, relwidth = 0.5)
-            self.crearLabels(myFrame)
 
 
         def TractaBoto(self,fine):
@@ -76,8 +67,8 @@ def Finestra2(name):
     fine = Tk()
     fine.title("Tractar PDF")
     #fine.configure(bg = "#0077C8
-    fine.minsize(1250,685)
-    fine.maxsize(1250,685)
+    fine.minsize(550,385)
+    fine.maxsize(550,385)
     fine.mainloop()
 
     pdf = PdfFileReader(name, "rb")
