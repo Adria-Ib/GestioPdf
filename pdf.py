@@ -48,27 +48,40 @@ def Finestra1():
             self.w.place(relx = 0.65, rely = 0.65)
 
         def EliminaPdf(self):
-            prv = []
-            sub = []
-            i = 0
-            while(i < self.num):
-                if(i != int(self.w.get())-1):
-                    prv.append(self.prv[i])
-                    sub.append(self.sub[i])
-                i+=1
-            self.prv = prv
-            self.sub = sub
-            self.num-=1
-            self.w.delete(0,"end")
-            self.EliminaSpin()
-            self.funcioScrollbar()
-            if(len(self.prv) == 1):
+            if(self.w.get() != ''):
+                prv = []
+                sub = []
+                i = 0
+                while(i < self.num):
+                    if(i != int(self.w.get())-1):
+                        prv.append(self.prv[i])
+                        sub.append(self.sub[i])
+                    i+=1
+                self.prv = prv
+                self.sub = sub
+                self.num-=1
                 self.w.delete(0,"end")
-                self.w.place_forget()
-            elif(len(self.prv) == 0):
-                self.text_area.place_forget()
-                self.EB.place_forget()
-                self.SB.config(text = "Separa PDF")
+                self.EliminaSpin()
+                if(len(self.prv) == 1):
+                    self.w.delete(0,"end")
+                    self.w.place_forget()
+                self.funcioScrollbar()
+            else:
+                if(len(self.prv) == 1):
+                    self.w.delete(0,"end")
+                    self.w.place_forget()
+                prv = []
+                sub = []
+                self.prv = prv
+                self.sub = sub
+                self.num-=1
+                self.funcioScrollbar()
+                if(len(self.prv) == 0):
+                    self.text_area.place_forget()
+                    self.EB.place_forget()
+                    self.SB.config(text = "Separa PDF")
+                    self.EnB.place_forget()
+
 
         def crearLabels(self):
             i = 0
