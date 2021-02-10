@@ -13,7 +13,6 @@ def Finestra1():
     fine.maxsize(550,385)
     class aplicacio:
         def __init__(self,fine):
-            self.txt = 0
             self.num = 0
             self.prv = []
             self.sub = []
@@ -41,7 +40,6 @@ def Finestra1():
                 if(self.num > 1):
                     self.EliminaSpin()
                 self.EndavantBoto()
-            #Finestra2(name)
 
         def EliminaSpin(self):
             self.w.config(from_=1, to=self.num)
@@ -82,7 +80,6 @@ def Finestra1():
                     self.SB.config(text = "Separa PDF")
                     self.EnB.place_forget()
 
-
         def crearLabels(self):
             i = 0
             string = ""
@@ -120,13 +117,63 @@ def Finestra1():
     fine.mainloop()
 
 
-
 def Finestra2(vct1,vct2):
     fine = Tk()
     fine.title("Separar PDF")
     #el path es vct2 i el nom vct1
     fine.minsize(550,385)
     fine.maxsize(550,385)
+    class SepPDF:
+        def __init__(self,fine,vct1,vct2):
+            self.num = 0
+            self.et = vct1
+            self.pa = vct2
+            self.top = Spinbox(fine)
+            self.bot = Spinbox(fine)
+            self.FA = Frame(fine,bg = "white")
+            self.etiquetaArxiu()
+            self.lbl = Label(self.FA, bg = "white", text = self.et[self.num])
+            self.TextEtiqueta()
+            if(len(vct1)>1):
+                self.BD = Button(fine)
+                self.BotoDret()
+                self.BE = Button(fine)
+
+        def ClickBotoDret(self):
+            self.num+=1
+            self.BotoEsquerre()
+            self.TextEtiqueta()
+            if(self.num < len(self.et)-1):
+                self.BotoDret()
+            if(self.num == len(self.et)-1):
+                self.BD.place_forget()
+
+        def ClickBotoEsquerre(self):
+            self.num-=1
+            self.BotoDret()
+            self.TextEtiqueta()
+            if(self.num > 1):
+                self.BotoEsquerre()
+            if(self.num == 0):
+                self.BE.place_forget()
+
+        def TextEtiqueta(self):
+            self.lbl.config(text = self.et[self.num])
+            self.lbl.pack()
+
+        def etiquetaArxiu(self):
+            self.FA.place(rely = 0.1,relx = 0.5,relwidth = 0.35, relheight = 0.05)
+
+        def BotoDret(self):
+            self.BD.config(text = ">>", command = lambda: self.ClickBotoDret())
+            self.BD.place(relx = 0.9, rely = 0.1)
+
+        def BotoEsquerre(self):
+            self.BE.config(text = "<<", command = lambda: self.ClickBotoEsquerre())
+            self.BE.place(relx = 0.4, rely = 0.1)
+
+
+    SepPDF(fine,vct1,vct2)
     fine.mainloop()
 
     #pdf = PdfFileReader(name, "rb")
