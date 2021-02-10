@@ -17,72 +17,117 @@ def Finestra1():
             self.num = 0
             self.prv = []
             self.sub = []
-            self.TractaBoto(fine)
-
-        def TractarPdf(self):
-            name = filedialog.askopenfilename(title = "Escull el fitxer que conté la informació", filetypes = (("PDF files","*.pdf"),))
-            cachos = name.split("/")
-            self.sub.append(name)
-            self.prv.append(cachos[len(cachos)-1])
-            self.funcioScrollbar(fine)
-            self.num+=1
-            #Finestra2(name)
-
-        def crearLabels(self):
-            i = 0
-            string = ""
-            while(i <= self.num):
-                string = string + self.prv[i]+'\n'
-                i+=1
-            return string
-
-
-        def funcioScrollbar(self,fine):
-            text_area = scrolledtext.ScrolledText(fine,
+            self.w = Spinbox(fine)
+            self.EB = Button(fine, text ="Elimina")
+            self.SB = Button(fine)
+            self.SeparaBoto()
+            self.EnB = Button(fine)
+            self.text_area = scrolledtext.ScrolledText(fine,
                             width = 30,
                             height = 8,
                             font = ("Comic Sans",
                                     8))
-            text_area.place(relx = 0.45, rely = 0.4, relheight = 0.2, relwidth = 0.5)
-            text_area.insert(INSERT, self.crearLabels())
-            text_area.configure(state ='disabled')
 
+        def SeparaPdf(self):
+            name = filedialog.askopenfilename(title = "Escull el fitxer que conté la informació", filetypes = (("PDF files","*.pdf"),))
+            cachos = name.split("/")
+            if(name != ''):
+                self.sub.append(name)
+                self.prv.append(cachos[len(cachos)-1])
+                self.num+=1
+                self.funcioScrollbar()
+                self.SB.config(text = "Afegeix PDF")
+                self.EliminaBoto()
+                if(self.num > 1):
+                    self.EliminaSpin()
+                self.EndavantBoto()
+            #Finestra2(name)
 
+        def EliminaSpin(self):
+            self.w.config(from_=1, to=self.num)
+            self.w.place(relx = 0.65, rely = 0.65)
 
-        def TractaBoto(self,fine):
-            B = Button(fine, text ="Tractar Pdf", command = lambda: self.TractarPdf())
-            B.place(relx = 0.25, rely = 0.25)
+        def EliminaPdf(self):
+            prv = []
+            sub = []
+            i = 0
+            while(i < self.num):
+                if(i != int(self.w.get())-1):
+                    prv.append(self.prv[i])
+                    sub.append(self.sub[i])
+                i+=1
+            self.prv = prv
+            self.sub = sub
+            self.num-=1
+            self.w.delete(0,"end")
+            self.EliminaSpin()
+            self.funcioScrollbar()
+            if(len(self.prv) == 1):
+                self.w.delete(0,"end")
+                self.w.place_forget()
+            elif(len(self.prv) == 0):
+                self.text_area.place_forget()
+                self.EB.place_forget()
+                self.SB.config(text = "Separa PDF")
 
+        def crearLabels(self):
+            i = 0
+            string = ""
+            while(i < self.num):
+                string = string + str(i+1) + ". " + self.prv[i]+'\n'
+                i+=1
+            return string
 
-    def Titol(fine):
-        frameArxius = Frame(fine, bg = "white")
-        frameArxius.place(relx = 0.65, rely = 0.25)
-        funcioScrollbar(fine)
+        def funcioScrollbar(self):
+            self.text_area.config(state = 'normal')
+            self.text_area.delete("1.0", END)
+            self.text_area.insert(INSERT, self.crearLabels())
+            self.text_area.config(state ='disabled')
+            self.text_area.place(relx = 0.45, rely = 0.4, relheight = 0.2, relwidth = 0.5)
+
+        def SeparaBoto(self):
+            if(self.num == 0):
+                self.SB.config(text = "Separa PDF")
+                self.SB.place(relx = 0.25, rely = 0.25)
+            self.SB.config(command = lambda: self.SeparaPdf())
+
+        def EliminaBoto(self):
+            self.EB.config(command = lambda: self.EliminaPdf())
+            self.EB.place(relx = 0.45, rely = 0.65)
+
+        def EndavantClick(self,vector1,vector2):
+            self.EnB.config(state = DISABLED)
+            Finestra2(vector1,vector2)
+
+        def EndavantBoto(self):
+            self.EnB.config(text = "Endavant!", command = lambda: self.EndavantClick(self.prv,self.sub))
+            self.EnB.place(relx = 0.65, rely = 0.85)
+
     aplicacio(fine)
     fine.mainloop()
 
 
 
-def Finestra2(name):
+def Finestra2(vct1,vct2):
     fine = Tk()
-    fine.title("Tractar PDF")
-    #fine.configure(bg = "#0077C8
+    fine.title("Separar PDF")
+    #el path es vct2 i el nom vct1
     fine.minsize(550,385)
     fine.maxsize(550,385)
     fine.mainloop()
 
-    pdf = PdfFileReader(name, "rb")
+    #pdf = PdfFileReader(name, "rb")
 
     pdf_writer = PdfFileWriter()
 
-    for page in range(2, 4):
-        pdf_writer.addPage(pdf.getPage(page))
+    #for page in range(2, 4):
+        #pdf_writer.addPage(pdf.getPage(page))
 
-    output_fname = "Output.pdf"
+    #output_fname = "Output.pdf"
 
-    with open(output_fname, 'wb') as out:
-        pdf_writer.write(out)
+    #with open(output_fname, 'wb') as out:
+        #pdf_writer.write(out)
 
-    print ("PDF file has been split")
+    #print ("PDF file has been split")
 
 Finestra1()
